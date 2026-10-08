@@ -1019,7 +1019,7 @@
   <div class="p-toolbar" id="pToolbar">
     <label class="p-search"><span>🔍</span><input id="pSearch" type="search" placeholder="Buscar una clase…" autocomplete="off" aria-label="Buscar clase"><kbd>/</kbd></label>
     <div class="p-chips" id="pChips"></div>
-    <div class="p-sort" id="pSort"><button data-s="asc" class="on">Orden clase</button><button data-s="desc">Más nuevas</button></div>
+    <div class="p-sort" id="pSort"><button data-s="asc" class="on">Más antiguas</button><button data-s="desc">Más nuevas</button></div>
   </div>
   <div class="p-meta" id="pMeta"></div>
   <div class="classes-grid" id="classesGrid"></div>
@@ -1460,7 +1460,7 @@ const CLASSES = [
 </style>
 <div class="c6" data-fx="green" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*1.8);">
   <div class="c6shield">🛡️</div>
-  <div class="c6k" style="font-size:calc(var(--u)*1.9);">Clase 16</div>
+  <div class="c6k" style="font-size:calc(var(--u)*1.9);">Clase</div>
   <h1 class="c6t" style="font-size:calc(var(--u)*6.1);">Seguridad y prevención<br>de <em>estafas</em> de tus cuentas</h1>
   <p class="c6s" style="font-size:calc(var(--u)*2.6);max-width:calc(var(--u)*78);">Protege tus páginas de Facebook, YouTube, Instagram y TikTok antes de que alguien intente quedarse con ellas</p>
 <div class="c6logos"><img class="c6lg" src="${C15L.facebook}" alt="Facebook"><img class="c6lg" src="${C15L.youtube}" alt="YouTube"><img class="c6lg" src="${C15L.instagram}" alt="Instagram"><img class="c6lg" src="${C15L.tiktok}" alt="TikTok"></div></div>
@@ -1639,7 +1639,6 @@ function cardHTML(c, i, seen, newestId) {
          onclick="portalOpen(${i})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();portalOpen(${i})}">
       <div class="card-cover" style="--bg:${c.bg}">
         <span class="cv-orb a"></span><span class="cv-orb b"></span>
-        <span class="cv-num">${pad2(c.id)}</span>
         <div class="cv-pills"><span class="cv-pill cat">${cat.name}</span>${isNew ? '<span class="cv-pill new">Nueva</span>' : ''}</div>
         <div class="cv-emoji"><span>${c.emoji}</span></div>
         <span class="cv-seen">✓ Vista</span>
@@ -1705,10 +1704,10 @@ function renderPortal() {
         <span class="pf-badge"><i></i>Nueva clase</span>
         <h2 class="pf-title">${esc(f.title)}</h2>
         <p class="pf-desc">${esc(f.description)}</p>
-        <div class="pf-meta"><span>Clase ${pad2(f.id)}</span><span>${f.slides.length} diapositivas</span><span>${fk.name}</span></div>
+        <div class="pf-meta"><span>${f.slides.length} diapositivas</span><span>${fk.name}</span></div>
         <div><button class="btn-open lg" tabindex="-1">Abrir clase →</button></div>
       </div>
-      <div class="pf-art"><span class="cv-orb a"></span><span class="cv-orb b"></span><span class="pf-num">${pad2(f.id)}</span><span class="pf-emoji">${f.emoji}</span></div>
+      <div class="pf-art"><span class="cv-orb a"></span><span class="cv-orb b"></span><span class="pf-emoji">${f.emoji}</span></div>
     </div>`;
 
   // Continuar donde ibas
