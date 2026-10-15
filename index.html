@@ -1331,21 +1331,11 @@ function c15FxSync() {
   const wrap = document.getElementById('slideWrap');
   wrap.classList.remove('c15fxwrap');
   C15FX.stop();
-  if (CUR && (CUR.id === 15 || CUR.id === 16)) { wrap.classList.add('c15fxwrap'); C15FX.start(wrap); }
+  if (CUR && CUR.id >= 15) { wrap.classList.add('c15fxwrap'); C15FX.start(wrap); }
 }
 
-const CLASSES = [
-
-  {
-    id: 16,
-    title: "Seguridad y prevención de estafas de tus cuentas",
-    description: "Cuida tus páginas de Facebook, YouTube, Instagram y TikTok: contraseñas, verificación en dos pasos, roles y cómo detectar estafas",
-    emoji: "🛡️",
-    bg: "linear-gradient(135deg,#04120d 0%,#0b2a24 45%,#0a3b4a 100%)",
-    slides: [
-
-      { type: "rawhtml", data: { html: `
-<style>
+// Estilos compartidos de las diapositivas (.c6) — los usan las clases de Seguridad y de IA
+const C6CSS = `
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700;800;900&display=swap');
 .c6{--u:calc(min(.95vw,calc((100vh - 140px)/50))*var(--k,1));--kc:#34d399;--g1:#34d399;--g2:#22d3ee;position:relative;width:100%;height:100%;box-sizing:border-box;display:flex;flex-direction:column;gap:calc(var(--u)*1.4);padding:calc(var(--u)*1.6) calc(var(--u)*3.4) calc(var(--u)*1.8);overflow-y:auto;overflow-x:hidden;font-family:Poppins,'Segoe UI',system-ui,sans-serif;color:#fff;}
 .c6 *{box-sizing:border-box;}
@@ -1457,7 +1447,115 @@ const CLASSES = [
   .c6mo{grid-template-columns:repeat(6,minmax(0,1fr));}
   .c6tile.c6row{flex-direction:column;align-items:flex-start;}
 }
-</style>
+`;
+
+// Clase IA asistente — ventanas de chat de ChatGPT/Claude y animaciones
+const IACSS = `
+/* ─── Clase IA asistente: ventanas de chat, prompts y animaciones ─── */
+.ia .c6two{grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);}
+.iawin{border-radius:calc(var(--u)*1.8);overflow:hidden;display:flex;flex-direction:column;box-shadow:0 calc(var(--u)*1.4) calc(var(--u)*4.5) rgba(0,0,0,.55);min-width:0;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;}
+.iahd{display:flex;align-items:center;gap:calc(var(--u)*.9);padding:calc(var(--u)*1) calc(var(--u)*1.6);font-size:calc(var(--u)*1.9);font-weight:700;flex:none;}
+.iahd img{width:calc(var(--u)*2.8);height:calc(var(--u)*2.8);border-radius:calc(var(--u)*.7);object-fit:cover;}
+.iahd .mdl{margin-left:auto;font-size:calc(var(--u)*1.35);font-weight:600;opacity:.55;font-family:'Segoe UI',system-ui,sans-serif;}
+.iabd{flex:1;display:flex;flex-direction:column;gap:calc(var(--u)*1.3);padding:calc(var(--u)*1.4) calc(var(--u)*2);font-size:calc(var(--u)*1.85);line-height:1.45;}
+.iam.u{align-self:flex-end;max-width:88%;}
+.iam.u .bb{padding:calc(var(--u)*1) calc(var(--u)*1.5);border-radius:calc(var(--u)*2);}
+.iam.a{position:relative;align-self:stretch;min-height:calc(var(--u)*3);}
+.iam.a p{margin:0 0 calc(var(--u)*.55);}
+.iam.a ol,.iam.a ul{margin:0 0 calc(var(--u)*.55);padding-left:calc(var(--u)*2.6);}
+.iam.a li{margin:calc(var(--u)*.2) 0;}
+.iam.a>:last-child{margin-bottom:0;}
+.iatyp{position:absolute;top:0;left:0;display:flex;gap:calc(var(--u)*.55);padding:calc(var(--u)*.9) 0;opacity:0;}
+.iatyp i{width:calc(var(--u)*1);height:calc(var(--u)*1);border-radius:50%;background:currentColor;opacity:.55;display:block;}
+.iain{flex:none;margin:calc(var(--u)*.4) calc(var(--u)*1.6) calc(var(--u)*1.4);display:flex;align-items:center;gap:calc(var(--u)*1);padding:calc(var(--u)*.8) calc(var(--u)*.9) calc(var(--u)*.8) calc(var(--u)*1.5);font-size:calc(var(--u)*1.7);}
+.iain .ph{flex:1;opacity:.55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.iain .pl{font-size:calc(var(--u)*2.4);opacity:.7;line-height:1;}
+.iain .snd{width:calc(var(--u)*3.2);height:calc(var(--u)*3.2);border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:900;flex:none;}
+.gpt{background:#212121;color:#ececec;}
+.gpt .iahd{border-bottom:1px solid rgba(255,255,255,.07);}
+.gpt .iam.u .bb{background:#303030;}
+.gpt .iain{background:#303030;border-radius:99px;}
+.gpt .snd{background:#fff;color:#000;}
+.gpt b{color:#fff;}
+.cld{background:#faf9f5;color:#141413;}
+.cld .iahd{font-family:Georgia,'Times New Roman',serif;font-weight:600;border-bottom:1px solid #ebe8de;}
+.cld .iam.u .bb{background:#f0eee6;}
+.cld .iam.a{font-family:Georgia,'Times New Roman',serif;}
+.cld .iain{background:#fff;border:calc(var(--u)*.12) solid #e3dfd3;border-radius:calc(var(--u)*1.6);box-shadow:0 calc(var(--u)*.3) calc(var(--u)*1) rgba(0,0,0,.05);}
+.cld .snd{background:#c96442;color:#fff;border-radius:calc(var(--u)*.9);}
+.cld .iatyp{color:#c96442;}
+.cld b{color:#000;}
+/* partes del prompt */
+.hr,.hf,.hc,.hp{border-radius:calc(var(--u)*.35);padding:0 calc(var(--u)*.25);-webkit-box-decoration-break:clone;box-decoration-break:clone;}
+.hr{background:rgba(167,139,250,.3);box-shadow:inset 0 calc(var(--u)*-.22) 0 #a78bfa;}
+.hf{background:rgba(34,211,238,.24);box-shadow:inset 0 calc(var(--u)*-.22) 0 #22d3ee;}
+.hc{background:rgba(251,191,36,.28);box-shadow:inset 0 calc(var(--u)*-.22) 0 #fbbf24;}
+.hp{background:rgba(52,211,153,.25);box-shadow:inset 0 calc(var(--u)*-.22) 0 #34d399;}
+.iapr{background:rgba(255,255,255,.06);border:calc(var(--u)*.14) solid rgba(255,255,255,.16);border-radius:calc(var(--u)*1.8);padding:calc(var(--u)*2) calc(var(--u)*2.4);font-size:calc(var(--u)*2.55);line-height:1.65;font-weight:500;}
+.iapr .who{display:block;font-size:calc(var(--u)*1.45);letter-spacing:.18em;text-transform:uppercase;font-weight:800;color:rgba(255,255,255,.5);margin-bottom:calc(var(--u)*.6);}
+.ialeg .c6card{border-top-width:calc(var(--u)*.5);}
+/* captura adjunta */
+.iashot{background:#fff;color:#1c1e21;border-radius:calc(var(--u)*1.1);overflow:hidden;margin-bottom:calc(var(--u)*.8);font-family:'Segoe UI',system-ui,sans-serif;}
+.iashot .fb{background:#1877f2;color:#fff;font-weight:800;font-size:calc(var(--u)*1.45);padding:calc(var(--u)*.45) calc(var(--u)*1.1);}
+.iashot .bd{padding:calc(var(--u)*1) calc(var(--u)*1.2);display:flex;gap:calc(var(--u)*1);align-items:flex-start;font-size:calc(var(--u)*1.5);line-height:1.3;color:#444;}
+.iashot .bd b{color:#1c1e21;display:block;font-size:calc(var(--u)*1.65);}
+.iashot .bt{display:inline-block;margin-top:calc(var(--u)*.6);background:#e4e6eb;color:#1c1e21;border-radius:calc(var(--u)*.6);padding:calc(var(--u)*.3) calc(var(--u)*1);font-weight:700;}
+.iaclip{font-size:calc(var(--u)*1.4);opacity:.6;margin-bottom:calc(var(--u)*.4);}
+/* portada y piezas */
+.iabig{display:flex;align-items:center;gap:calc(var(--u)*2.4);}
+.iabig img{width:calc(var(--u)*9);height:calc(var(--u)*9);border-radius:calc(var(--u)*2.2);object-fit:cover;background:#fff;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3.5) rgba(34,211,238,.35);animation:iaFloat 4s ease-in-out infinite;}
+.iabig img:last-child{animation-delay:-2s;}
+.iabig .plus{font-size:calc(var(--u)*4);font-weight:900;color:rgba(255,255,255,.55);}
+.iachips{display:flex;flex-wrap:wrap;gap:calc(var(--u)*1);justify-content:center;}
+.iachip{padding:calc(var(--u)*.6) calc(var(--u)*1.6);border-radius:99px;background:rgba(255,255,255,.08);border:calc(var(--u)*.12) solid rgba(255,255,255,.18);font-size:calc(var(--u)*1.9);font-weight:700;white-space:nowrap;}
+.iatool{align-items:flex-start;gap:calc(var(--u)*1);}
+.iatool img{width:calc(var(--u)*6.4);height:calc(var(--u)*6.4);border-radius:calc(var(--u)*1.5);object-fit:cover;background:#fff;}
+.iaurl{font-size:calc(var(--u)*1.9);font-weight:700;color:var(--kc);}
+.iamini{border-radius:calc(var(--u)*1.4);padding:calc(var(--u)*1) calc(var(--u)*1.4);font-size:calc(var(--u)*2.1);line-height:1.4;font-weight:500;background:#303030;color:#ececec;align-self:flex-start;}
+.iaq{position:relative;background:#fff;color:#111;border-radius:calc(var(--u)*2);padding:calc(var(--u)*1.4) calc(var(--u)*2);font-size:calc(var(--u)*2.6);font-weight:800;line-height:1.25;align-self:flex-start;box-shadow:0 calc(var(--u)*1) calc(var(--u)*3) rgba(0,0,0,.4);}
+.iaq::after{content:'';position:absolute;left:calc(var(--u)*3);bottom:calc(var(--u)*-1.4);border:calc(var(--u)*.8) solid transparent;border-top:calc(var(--u)*.9) solid #fff;}
+.iabigic{font-size:calc(var(--u)*7);line-height:1;filter:drop-shadow(0 0 calc(var(--u)*2.4) rgba(34,211,238,.5));animation:iaFloat 3.6s ease-in-out infinite;}
+.iaglow{animation:iaGlow 2.6s ease-in-out infinite;}
+.ia .c6arrow{animation:iaNudge 1.6s ease-in-out infinite;}
+/* animaciones: solo corren en la diapositiva activa */
+@keyframes iaUp{from{opacity:0;transform:translateY(calc(var(--u)*1.6))}to{opacity:1;transform:none}}
+@keyframes iaMsg{from{opacity:0;transform:translateY(calc(var(--u)*1.4)) scale(.96)}to{opacity:1;transform:none}}
+@keyframes iaTyp{0%{opacity:0}12%,88%{opacity:1}100%{opacity:0}}
+@keyframes iaDot{0%,60%,100%{transform:translateY(0);opacity:.35}30%{transform:translateY(-40%);opacity:1}}
+@keyframes iaFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-8%)}}
+@keyframes iaNudge{0%,100%{transform:translateX(0)}50%{transform:translateX(22%)}}
+@keyframes iaGlow{0%,100%{box-shadow:0 0 0 0 rgba(251,191,36,0)}50%{box-shadow:0 0 calc(var(--u)*2.6) calc(var(--u)*.2) rgba(251,191,36,.35)}}
+.slide.active .ia .rv{animation:iaUp .6s cubic-bezier(.2,.8,.2,1) var(--d,.1s) both;}
+.slide.active .ia .stg>*{animation:iaUp .55s cubic-bezier(.2,.8,.2,1) calc(var(--d,.15s) + var(--i,0)*.13s) both;}
+.ia .stg>:nth-child(2){--i:1}.ia .stg>:nth-child(3){--i:2}.ia .stg>:nth-child(4){--i:3}.ia .stg>:nth-child(5){--i:4}
+.ia .stg>:nth-child(6){--i:5}.ia .stg>:nth-child(7){--i:6}.ia .stg>:nth-child(8){--i:7}.ia .stg>:nth-child(9){--i:8}
+.slide.active .ia .iam.u{animation:iaMsg .5s cubic-bezier(.2,.8,.2,1) var(--d,0s) both;}
+.slide.active .ia .iam.a .iatyp{animation:iaTyp var(--t,1.3s) ease var(--d,0s) both;}
+.slide.active .ia .iatyp i{animation:iaDot 1s ease-in-out infinite;}
+.ia .iatyp i:nth-child(2){animation-delay:.15s}.ia .iatyp i:nth-child(3){animation-delay:.3s}
+.slide.active .ia .iam.a>:not(.iatyp){animation:iaUp .45s ease calc(var(--d,0s) + var(--t,1.3s) + var(--i,0)*.3s) both;}
+.ia .iam.a>:nth-child(3){--i:1}.ia .iam.a>:nth-child(4){--i:2}.ia .iam.a>:nth-child(5){--i:3}.ia .iam.a>:nth-child(6){--i:4}.ia .iam.a>:nth-child(7){--i:5}
+.ia-pdf .ia,.ia-pdf .ia *{animation:none!important;}
+@media (prefers-reduced-motion:reduce){.ia,.ia *{animation:none!important;}}
+@media (max-width:760px){
+  .ia .c6arrow{animation:none;}
+  .iam.u{max-width:94%;}
+  .iabig img{width:64px;height:64px;}
+}
+`;
+
+const CLASSES = [
+
+  {
+    id: 16,
+    title: "Seguridad y prevención de estafas de tus cuentas",
+    description: "Cuida tus páginas de Facebook, YouTube, Instagram y TikTok: contraseñas, verificación en dos pasos, roles y cómo detectar estafas",
+    emoji: "🛡️",
+    bg: "linear-gradient(135deg,#04120d 0%,#0b2a24 45%,#0a3b4a 100%)",
+    slides: [
+
+      { type: "rawhtml", data: { html: `
+<style>${C6CSS}</style>
 <div class="c6" data-fx="green" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*1.8);">
   <div class="c6shield">🛡️</div>
   <div class="c6k" style="font-size:calc(var(--u)*1.9);">Clase</div>
@@ -1589,6 +1687,280 @@ const CLASSES = [
       `}}
 
     ]
+  },
+
+  {
+    id: 17,
+    title: "Convierte la IA en tu asistente para todo",
+    description: "Aprende a usar ChatGPT y Claude como un experto a tu lado: dale un rol, dale contexto y resuelve dudas de tu contenido y de tu vida diaria",
+    emoji: "🤖",
+    bg: "linear-gradient(135deg,#060b1f 0%,#14123a 45%,#0a3346 100%)",
+    slides: [
+
+      { type: "rawhtml", data: { html: `
+<style>${C6CSS}${IACSS}</style>
+<div class="c6 ia" data-fx="cyan" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*1.8);">
+  <div class="iabig rv"><img src="${C15L.chatgpt}" alt="ChatGPT"><span class="plus">+</span><img src="${C15L.claude}" alt="Claude"></div>
+  <div class="c6k rv" style="--d:.25s;font-size:calc(var(--u)*1.9);">Clase</div>
+  <h1 class="c6t rv" style="--d:.4s;font-size:calc(var(--u)*6.2);">Convierte la IA en tu<br><em>asistente para todo</em></h1>
+  <p class="c6s rv" style="--d:.55s;font-size:calc(var(--u)*2.6);max-width:calc(var(--u)*80);">Usa ChatGPT y Claude como si tuvieras un experto a tu lado: para tu contenido, tu casa, tu salud y cualquier duda</p>
+  <div class="iachips stg" style="--d:.75s;"><span class="iachip">💰 Monetización</span><span class="iachip">👨‍🍳 Cocina</span><span class="iachip">💪 Gimnasio</span><span class="iachip">🥗 Nutrición</span><span class="iachip">🔧 Mecánica</span><span class="iachip">✨ Lo que necesites</span></div>
+</div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="cyan"><div class="c6h rv"><div class="c6k">Lo primero</div><h2 class="c6t">Es como <em>platicar con una persona</em></h2><p class="c6s">No necesitas saber de tecnología ni usar palabras raras. Le escribes como le escribirías a un amigo por WhatsApp.</p></div>
+<div class="c6b"><div class="c6g stg" style="--c:3;--d:.3s;">
+  <div class="c6card c6tile"><div class="c6ic">💬</div><div class="c6ct">Escríbele normal</div><div class="c6cd">Con tus propias palabras, aunque tengas faltas de ortografía. Te entiende.</div></div>
+  <div class="c6card c6tile"><div class="c6ic">🎙️</div><div class="c6ct">Háblale</div><div class="c6cd">Desde la app del celular puedes dictarle o platicar con ella en voz alta.</div></div>
+  <div class="c6card c6tile"><div class="c6ic">📸</div><div class="c6ct">Enséñale</div><div class="c6cd">Mándale fotos o capturas de pantalla y pregúntale qué significan.</div></div>
+</div>
+<div class="c6rule gold rv" style="--d:.8s;"><span class="e">💡</span><span>Y lo más poderoso: la puedes <b>programar para que tome el rol que tú quieras</b>. Hoy te enseño cómo.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="cyan"><div class="c6h rv"><div class="c6k">Las herramientas</div><h2 class="c6t">Hoy usaremos <em>dos</em></h2></div>
+<div class="c6b"><div class="c6g stg" style="--c:2;--d:.25s;">
+  <div class="c6card iatool"><div style="display:flex;align-items:center;gap:calc(var(--u)*1.6);"><img src="${C15L.chatgpt}" alt="ChatGPT"><div><div class="c6ct">ChatGPT</div><div class="iaurl">chatgpt.com · app para celular</div></div></div>
+    <ul class="c6li bul"><li>La más conocida</li><li>Muy buena para dudas de todo tipo</li><li>Entiende fotos, capturas y voz</li><li>Tiene versión gratis</li></ul></div>
+  <div class="c6card iatool"><div style="display:flex;align-items:center;gap:calc(var(--u)*1.6);"><img src="${C15L.claude}" alt="Claude"><div><div class="c6ct">Claude</div><div class="iaurl">claude.ai · app para celular</div></div></div>
+    <ul class="c6li bul"><li>Explica con mucha calma y claridad</li><li>Muy buena para redactar y analizar textos largos</li><li>Entiende fotos, capturas y documentos</li><li>Tiene versión gratis</li></ul></div>
+</div>
+<div class="c6rule rv" style="--d:.7s;"><span class="e">🤝</span><span>Las dos funcionan igual: <b>tú le escribes y ella te responde</b>. Todo lo que aprendas hoy sirve en las dos.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="gold"><div class="c6h rv"><div class="c6k">La clave de todo</div><h2 class="c6t">Primero <em>conviértela en el experto</em> que necesitas</h2><p class="c6s">Así como le escribes a tu nutriólogo, a tu mecánico o a tu psicólogo, primero entrena al chat para que sea ese especialista.</p></div>
+<div class="c6b"><div class="c6flow stg" style="--d:.3s;">
+  <div class="c6card iaglow"><div class="c6ic">🎭</div><div class="c6ct">1. Dale un rol</div><div class="c6cd">“Conviértete en un experto en…”</div></div>
+  <div class="c6arrow">➜</div>
+  <div class="c6card"><div class="c6ic">📍</div><div class="c6ct">2. Dale contexto</div><div class="c6cd">Quién eres, dónde estás y qué tienes</div></div>
+  <div class="c6arrow">➜</div>
+  <div class="c6card"><div class="c6ic">💬</div><div class="c6ct">3. Pregunta</div><div class="c6cd">Y sigue platicando hasta resolverlo</div></div>
+</div>
+<div class="c6rule gold rv" style="--d:1s;"><span class="e">🎓</span><span>Si le das buenas primeras indicaciones, <b>te responde como un especialista</b> y no como un buscador cualquiera.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="gold"><div class="c6h rv"><div class="c6k">La fórmula</div><h2 class="c6t">Así se ve un <em>buen mensaje</em></h2></div>
+<div class="c6b">
+  <div class="iapr rv" style="--d:.25s;"><span class="who">Tú escribes</span><span class="hr">Conviértete en un experto en monetización de contenido en Facebook.</span> <span class="hf">Basa tus respuestas en las fuentes oficiales y en la información más actual.</span> <span class="hc">Tengo una página de recetas con 8,000 seguidores y vivo en México.</span> <span class="hp">¿Qué me falta para empezar a monetizar?</span></div>
+  <div class="c6g ialeg stg" style="--c:4;--d:.6s;">
+    <div class="c6card" style="border-color:#a78bfa;"><div class="c6ct" style="color:#c4b5fd;">🎭 Rol</div><div class="c6cd">¿Quién quieres que sea?</div></div>
+    <div class="c6card" style="border-color:#22d3ee;"><div class="c6ct" style="color:#67e8f9;">📚 Fuentes</div><div class="c6cd">¿De dónde debe sacar la información?</div></div>
+    <div class="c6card" style="border-color:#fbbf24;"><div class="c6ct" style="color:#fcd34d;">📍 Contexto</div><div class="c6cd">Quién eres, dónde vives, qué tienes</div></div>
+    <div class="c6card" style="border-color:#34d399;"><div class="c6ct" style="color:#6ee7b7;">❓ Pregunta</div><div class="c6cd">Lo que de verdad quieres saber</div></div>
+  </div>
+  <div class="c6rule rv" style="--d:1.2s;"><span class="e">✨</span><span>Truco: termina con <b>“Si te falta información, hazme preguntas antes de responder”</b>.</span></div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="red"><div class="c6h rv"><div class="c6k">La diferencia</div><h2 class="c6t">Preguntar así <em>vs.</em> preguntar bien</h2></div>
+<div class="c6b"><div class="c6g stg" style="--c:2;--d:.3s;">
+  <div class="c6card c6bad" style="justify-content:flex-start;"><span class="c6tag no">✕ ASÍ NO</span><div class="iamini">¿Cómo gano dinero en Facebook?</div><ul class="c6li no"><li>No sabe quién eres ni qué tienes</li><li>Te da una respuesta general, igual para todos</li><li>Tienes que adivinar qué aplica para ti</li></ul></div>
+  <div class="c6card c6good" style="justify-content:flex-start;"><span class="c6tag ok">✓ ASÍ SÍ</span><div class="iamini"><span class="hr">Eres experto en monetización de Facebook.</span> <span class="hf">Usa fuentes oficiales.</span> <span class="hc">Tengo una página de recetas con 8,000 seguidores en México.</span> <span class="hp">¿Qué me falta para monetizar?</span></div><ul class="c6li ok"><li>Sabe exactamente tu situación</li><li>Te responde paso a paso, a tu medida</li><li>Mucho más fiable</li></ul></div>
+</div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia c6sim" data-fx="green"><div class="c6h rv"><div class="c6k">Simulación · ChatGPT</div><h2 class="c6t">Entrena tu <em>experto en monetización</em></h2></div>
+<div class="c6two">
+  <div class="iawin gpt rv" style="--d:.2s;"><div class="iahd"><img src="${C15L.chatgpt}" alt=""><span>ChatGPT</span><span class="mdl">Nuevo chat</span></div>
+    <div class="iabd">
+      <div class="iam u" style="--d:.6s;"><div class="bb"><span class="hr">Conviértete en un experto en monetización de contenido.</span> <span class="hf">Basa tus respuestas en las fuentes oficiales de cada plataforma y en la información más actual.</span> Desde ahora te voy a preguntar todas mis dudas de monetización.</div></div>
+      <div class="iam a" style="--d:1.3s;--t:1.4s;"><span class="iatyp"><i></i><i></i><i></i></span>
+        <p>¡Perfecto! Desde ahora soy tu <b>experto en monetización de contenido</b>. 💰</p>
+        <p>Para darte respuestas exactas, cuéntame:</p>
+        <ol><li>¿En qué plataforma publicas? (Facebook, YouTube, TikTok…)</li><li>¿Cuántos seguidores tienes?</li><li>¿En qué país vives?</li></ol>
+        <p>Con eso te digo qué requisitos te faltan y cuál es tu siguiente paso.</p>
+      </div>
+    </div>
+    <div class="iain"><span class="pl">+</span><span class="ph">Pregunta lo que quieras</span><span class="snd">↑</span></div></div>
+  <div class="c6side stg" style="--d:.5s;">
+    <div class="c6co"><div class="n" style="background:#a78bfa;box-shadow:none;">1</div><div><div class="t">Le diste un rol</div><div class="d">Ahora responde como especialista</div></div></div>
+    <div class="c6co"><div class="n" style="background:#22d3ee;box-shadow:none;">2</div><div><div class="t">Le pediste fuentes oficiales</div><div class="d">Respuestas más fiables y actuales</div></div></div>
+    <div class="c6co"><div class="n" style="background:#34d399;box-shadow:none;">3</div><div><div class="t">Ella te pregunta a ti</div><div class="d">Para darte algo hecho a tu medida</div></div></div>
+    <div class="c6rule grn"><span class="e">📌</span><span><b>Guarda este chat.</b> Cada vez que tengas una duda de monetización, regresa a él.</span></div>
+  </div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia c6sim" data-fx="cyan"><div class="c6h rv"><div class="c6k">Simulación · ChatGPT</div><h2 class="c6t">¿Te salió un aviso? <em>Mándale la captura</em></h2></div>
+<div class="c6two">
+  <div class="iawin gpt rv" style="--d:.2s;"><div class="iahd"><img src="${C15L.chatgpt}" alt=""><span>ChatGPT</span><span class="mdl">Experto en monetización</span></div>
+    <div class="iabd">
+      <div class="iam u" style="--d:.6s;"><div class="iashot"><div class="fb">facebook</div><div class="bd"><span style="font-size:calc(var(--u)*2.6);line-height:1;">⚠️</span><div><b>Tu contenido tiene restricciones de monetización</b>Una o más publicaciones no cumplen con nuestras políticas.<br><span class="bt">Ver detalles</span></div></div></div><div class="bb">Me salió este aviso en mi página. ¿Qué significa y qué tengo que hacer?</div></div>
+      <div class="iam a" style="--d:1.4s;--t:1.4s;"><span class="iatyp"><i></i><i></i><i></i></span>
+        <p>Tranquilo, <b>no significa que perdiste tu página</b>. 🙌 El aviso indica que alguna publicación no cumple las políticas de monetización.</p>
+        <p>Haz esto:</p>
+        <ol><li>Entra a tu <b>Panel profesional → Monetización</b>.</li><li>Revisa qué publicación tiene el aviso y por qué.</li><li>Si crees que es un error, <b>solicita una revisión</b>.</li></ol>
+      </div>
+    </div>
+    <div class="iain"><span class="pl">+</span><span class="ph">Pregunta lo que quieras</span><span class="snd">↑</span></div></div>
+  <div class="c6side stg" style="--d:.5s;">
+    <div class="c6st"><div class="c6n">1</div><div class="tx"><b>Toma captura</b> del aviso que te salió</div></div>
+    <div class="c6st"><div class="c6n">2</div><div class="tx">En el chat, toca el <b>+</b> y <b>adjunta la imagen</b></div></div>
+    <div class="c6st"><div class="c6n">3</div><div class="tx">Pregúntale <b>qué significa y qué hacer</b></div></div>
+    <div class="c6rule"><span class="e">🧠</span><span>Hazlo en el chat que <b>ya entrenaste</b>: ya sabe que es tu experto en monetización.</span></div>
+  </div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="red"><div class="c6h rv"><div class="c6k">Importante</div><h2 class="c6t">Es muy buena… pero <em>no es perfecta</em></h2></div>
+<div class="c6b"><div class="c6g stg" style="--c:3;--d:.3s;">
+  <div class="c6card c6good" style="justify-content:flex-start;"><span class="c6tag ok">✓ ÚSALA PARA</span><ul class="c6li ok"><li>Dudas del día a día</li><li>Cosas que no sabes ni por dónde empezar</li><li>Que te expliquen algo fácil</li></ul></div>
+  <div class="c6card c6gold" style="justify-content:flex-start;"><span class="c6tag go">⚠ TEN CUIDADO</span><ul class="c6li bul"><li>A veces se equivoca o inventa</li><li>Verifica lo importante</li><li>Pregúntale: “¿de dónde sacaste eso?”</li></ul></div>
+  <div class="c6card c6bad" style="justify-content:flex-start;"><span class="c6tag no">✕ NUNCA LE DES</span><ul class="c6li no"><li>Contraseñas</li><li>Códigos de verificación</li><li>Datos de tu tarjeta o banco</li></ul></div>
+</div>
+<div class="c6rule red rv" style="--d:.9s;"><span class="e">👨‍⚕️</span><span>En temas de salud, la IA te <b>orienta</b>; para algo serio, <b>siempre consulta a un profesional</b>.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="gold"><div class="c6h rv"><div class="c6k">No solo para el Club</div><h2 class="c6t">Sirve para <em>cualquier duda de tu vida</em></h2><p class="c6s">Dile que se convierta en el experto de la profesión que necesites.</p></div>
+<div class="c6b"><div class="c6g stg" style="--c:4;--d:.3s;">
+  <div class="c6card c6tile"><div class="c6ic">👨‍🍳</div><div class="c6ct">Chef</div><div class="c6cd">“¿Qué cocino con lo que tengo en el refri?”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">💪</div><div class="c6ct">Entrenador</div><div class="c6cd">“Hazme una rutina de gimnasio de 3 días”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">🥗</div><div class="c6ct">Nutriólogo</div><div class="c6cd">“Arma mi plan de comidas de la semana”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">🔧</div><div class="c6ct">Mecánico</div><div class="c6cd">“¿Por qué mi auto hace este ruido?”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">🧘</div><div class="c6ct">Coach de hábitos</div><div class="c6cd">“Ayúdame a dormir mejor y a usar menos el celular”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">💵</div><div class="c6ct">Asesor de finanzas</div><div class="c6cd">“Organiza mi presupuesto del mes”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">📚</div><div class="c6ct">Maestro</div><div class="c6cd">“Explícame esta tarea de mi hijo”</div></div>
+  <div class="c6card c6tile"><div class="c6ic">✈️</div><div class="c6ct">Agente de viajes</div><div class="c6cd">“Ármame un viaje de 3 días con poco dinero”</div></div>
+</div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia c6sim" data-fx="gold"><div class="c6h rv"><div class="c6k">Simulación · Claude</div><h2 class="c6t">Tu <em>chef personal</em>, en tu ciudad</h2></div>
+<div class="c6two">
+  <div class="iawin cld rv" style="--d:.2s;"><div class="iahd"><img src="${C15L.claude}" alt=""><span>Claude</span><span class="mdl">Nuevo chat</span></div>
+    <div class="iabd">
+      <div class="iam u" style="--d:.6s;"><div class="bb"><span class="hr">Conviértete en un chef experto en comida casera y saludable.</span> <span class="hc">Vivo en Monterrey, México, y compro en Soriana y en el mercado de mi colonia.</span> <span class="hp">Quiero una cena para 2 personas de menos de $200 pesos. Dime qué comprar y dónde.</span></div></div>
+      <div class="iam a" style="--d:1.4s;--t:1.4s;"><span class="iatyp"><i></i><i></i><i></i></span>
+        <p>¡Con gusto! Te propongo <b>tacos de pollo al limón con ensalada</b>. 🌮</p>
+        <ul><li><b>Pechuga de pollo (500 g)</b> — pollería del mercado, ~$75</li><li><b>Tortillas de maíz (½ kg)</b> — tortillería, ~$13</li><li><b>Limón, cebolla, cilantro y aguacate</b> — puesto de verduras del mercado, ~$55</li><li><b>Lechuga romana</b> — Soriana, frutas y verduras, ~$22</li></ul>
+        <p>Total aproximado: <b>$165</b> ✅ ¿Te paso la receta paso a paso?</p>
+      </div>
+    </div>
+    <div class="iain"><span class="pl">+</span><span class="ph">Responde a Claude…</span><span class="snd">↑</span></div></div>
+  <div class="c6side stg" style="--d:.5s;">
+    <div class="c6co"><div class="n" style="background:#a78bfa;box-shadow:none;">1</div><div><div class="t">El rol: chef</div><div class="d">Responde como un cocinero experto</div></div></div>
+    <div class="c6co"><div class="n" style="background:#fbbf24;box-shadow:none;color:#111;">2</div><div><div class="t">Dónde vives y dónde compras</div><div class="d">Te dice la tienda exacta y los nombres de tu país</div></div></div>
+    <div class="c6co"><div class="n" style="background:#34d399;box-shadow:none;color:#111;">3</div><div><div class="t">Tu presupuesto</div><div class="d">Se ajusta a lo que puedes gastar</div></div></div>
+    <div class="c6rule gold"><span class="e">📍</span><span>Entre más contexto le das, <b>más exacta es la respuesta</b>.</span></div>
+  </div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia c6sim" data-fx="green"><div class="c6h rv"><div class="c6k">Simulación · Claude</div><h2 class="c6t">Tu nutriólogo y entrenador: <em>te pide lo que necesita</em></h2></div>
+<div class="c6two">
+  <div class="iawin cld rv" style="--d:.2s;"><div class="iahd"><img src="${C15L.claude}" alt=""><span>Claude</span><span class="mdl">Nuevo chat</span></div>
+    <div class="iabd">
+      <div class="iam u" style="--d:.6s;"><div class="bb"><span class="hr">Conviértete en mi nutriólogo y entrenador personal.</span> <span class="hp">Quiero bajar de peso y empezar a ir al gimnasio.</span></div></div>
+      <div class="iam a" style="--d:1.3s;--t:1.3s;"><span class="iatyp"><i></i><i></i><i></i></span>
+        <p>¡Qué bueno que quieras empezar! 💪 Para armarte un plan seguro y a tu medida, necesito saber:</p>
+        <ol><li>Tu edad, peso y estatura</li><li>Si tienes alguna enfermedad, lesión o alergia</li><li>Cuántos días a la semana puedes entrenar</li><li>Qué comes en un día normal</li></ol>
+      </div>
+      <div class="iam u" style="--d:4.4s;"><div class="bb"><span class="hc">Tengo 32 años, peso 84 kg y mido 1.70 m. Sin lesiones. Puedo ir 3 días a la semana.</span></div></div>
+    </div>
+    <div class="iain"><span class="pl">+</span><span class="ph">Responde a Claude…</span><span class="snd">↑</span></div></div>
+  <div class="c6side stg" style="--d:.5s;">
+    <div class="c6st"><div class="c6n">1</div><div class="tx">Le das el <b>rol</b> y tu <b>objetivo</b></div></div>
+    <div class="c6st"><div class="c6n">2</div><div class="tx">Ella te <b>pregunta lo que necesita</b></div></div>
+    <div class="c6st"><div class="c6n">3</div><div class="tx">Tú le <b>das tus datos</b> y te arma tu rutina y tu plan</div></div>
+    <div class="c6rule red"><span class="e">👨‍⚕️</span><span>Si tienes alguna condición de salud, <b>confirma el plan con tu médico</b>.</span></div>
+  </div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia c6sim" data-fx="gold"><div class="c6h rv"><div class="c6k">Mi historia</div><h2 class="c6t">Hasta me ayudó a <em>reparar mi auto</em></h2></div>
+<div class="c6two" style="grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);">
+  <div class="c6side stg" style="--d:.3s;">
+    <div class="c6st"><div class="c6n">1</div><div class="tx">A mi auto le pasó algo <b>muy pequeño</b></div></div>
+    <div class="c6st"><div class="c6n">2</div><div class="tx">Le pedí que fuera <b>experto en mi auto</b>: marca, modelo, versión y motor</div></div>
+    <div class="c6st"><div class="c6n">3</div><div class="tx">Me dijo las <b>fallas más comunes</b> de ese modelo y qué revisar</div></div>
+    <div class="c6st"><div class="c6n">4</div><div class="tx">Llegué con el mecánico <b>sabiendo qué tenía</b></div></div>
+    <div class="iaq">🔧 “¿Y tú de dónde sabías eso?” 😲</div>
+  </div>
+  <div class="iawin gpt rv" style="--d:.4s;"><div class="iahd"><img src="${C15L.chatgpt}" alt=""><span>ChatGPT</span><span class="mdl">Ejemplo</span></div>
+    <div class="iabd">
+      <div class="iam u" style="--d:.8s;"><div class="bb"><span class="hr">Conviértete en un mecánico experto en el Nissan Versa 2019, versión Advance, motor 1.6 L.</span> <span class="hp">Se prendió el foco de “check engine” y da tirones al acelerar. ¿Qué reviso primero?</span></div></div>
+      <div class="iam a" style="--d:1.6s;--t:1.4s;"><span class="iatyp"><i></i><i></i><i></i></span>
+        <p>En ese modelo, las causas más comunes de esos síntomas son:</p>
+        <ol><li><b>Bujías o bobinas</b> desgastadas</li><li><b>Sensor de oxígeno</b> o del flujo de aire</li><li><b>Filtro de aire o de gasolina</b> sucio</li></ol>
+        <p>Primero pide un <b>escaneo del código de falla</b>: te dice exactamente cuál es. 🔍</p>
+      </div>
+    </div>
+    <div class="iain"><span class="pl">+</span><span class="ph">Pregunta lo que quieras</span><span class="snd">↑</span></div></div>
+</div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="cyan"><div class="c6h rv"><div class="c6k">¿Por qué funciona tan bien?</div><h2 class="c6t">Toda la información de internet, <em>filtrada para ti</em></h2></div>
+<div class="c6b"><div class="c6flow stg" style="--d:.3s;">
+  <div class="c6card"><div class="c6ic">🌐</div><div class="c6ct">Información regada</div><div class="c6cd">Miles de páginas, videos y foros por todo internet</div></div>
+  <div class="c6arrow">➜</div>
+  <div class="c6card iaglow"><div class="c6ic">🤖</div><div class="c6ct">La IA la junta y la filtra</div><div class="c6cd">Compara, verifica y se queda con lo importante</div></div>
+  <div class="c6arrow">➜</div>
+  <div class="c6card"><div class="c6ic">🙋</div><div class="c6ct">Te la explica a ti</div><div class="c6cd">Fácil de entender y personalizada a tu caso</div></div>
+</div>
+<div class="c6rule rv" style="--d:1s;"><span class="e">⏱️</span><span>Lo que antes te tomaba horas buscando, ahora lo tienes <b>en segundos y explicado a tu medida</b>.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="gold"><div class="c6h rv"><div class="c6k">Mi día a día</div><h2 class="c6t">Yo uso la IA <em>todos los días</em></h2></div>
+<div class="c6b"><div class="c6g stg" style="--c:3;--d:.3s;">
+  <div class="c6card c6row"><div class="c6ic">🍳</div><div class="c6ct">Nuevas recetas de cocina</div></div>
+  <div class="c6card c6row"><div class="c6ic">✅</div><div class="c6ct">Nuevos hábitos y rutinas</div></div>
+  <div class="c6card c6row"><div class="c6ic">🏋️</div><div class="c6ct">Rutinas de ejercicio</div></div>
+  <div class="c6card c6row"><div class="c6ic">🥗</div><div class="c6ct">Una vida más saludable</div></div>
+  <div class="c6card c6row"><div class="c6ic">🔧</div><div class="c6ct">Reparar mi auto</div></div>
+  <div class="c6card c6row"><div class="c6ic">🎬</div><div class="c6ct">Mi contenido y mis páginas</div></div>
+</div>
+<div class="c6rule gold rv" style="--d:1.1s;justify-content:center;font-size:calc(var(--u)*3);"><span class="e">🚀</span><span style="flex:none;"><b>Usa la tecnología a tu favor.</b></span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="cyan"><div class="c6h rv"><div class="c6k">Ahorra tiempo</div><h2 class="c6t">Entrénala <em>una sola vez</em></h2><p class="c6s">Para no repetir el rol cada vez, guárdalo en un proyecto. Todo chat que abras ahí ya sabe quién debe ser.</p></div>
+<div class="c6b"><div class="c6g stg" style="--c:2;--d:.3s;">
+  <div class="c6card iatool" style="justify-content:flex-start;"><div style="display:flex;align-items:center;gap:calc(var(--u)*1.4);"><img src="${C15L.chatgpt}" alt="ChatGPT" style="width:calc(var(--u)*4.6);height:calc(var(--u)*4.6);"><div class="c6ct">En ChatGPT</div></div>
+    <div class="c6path"><span>Proyectos</span><i>›</i><span>Nuevo</span><i>›</i><span>Instrucciones</span></div><div class="c6cd">Pega ahí tu rol: “Eres mi experto en monetización…”</div></div>
+  <div class="c6card iatool" style="justify-content:flex-start;"><div style="display:flex;align-items:center;gap:calc(var(--u)*1.4);"><img src="${C15L.claude}" alt="Claude" style="width:calc(var(--u)*4.6);height:calc(var(--u)*4.6);"><div class="c6ct">En Claude</div></div>
+    <div class="c6path"><span>Proyectos</span><i>›</i><span>Nuevo</span><i>›</i><span>Instrucciones</span></div><div class="c6cd">Pega ahí tu rol: “Eres mi chef personal…”</div></div>
+</div>
+<div class="c6rule rv" style="--d:.8s;"><span class="e">📌</span><span>¿Te parece complicado? Basta con <b>guardar el chat</b> que ya entrenaste y regresar siempre al mismo.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="green"><div class="c6h rv"><div class="c6k">Resumen</div><h2 class="c6t">Tu asistente para todo en <em>3 pasos</em></h2></div>
+<div class="c6b"><div class="c6g stg" style="--c:3;--d:.3s;">
+  <div class="c6card" style="border-color:#a78bfa;align-items:center;text-align:center;"><div class="c6ic">🎭</div><div class="c6ct">Dale un rol</div><div class="c6cd">“Conviértete en un experto en…”</div></div>
+  <div class="c6card" style="border-color:#fbbf24;align-items:center;text-align:center;"><div class="c6ic">📍</div><div class="c6ct">Dale contexto</div><div class="c6cd">Quién eres, dónde vives, qué tienes y qué quieres lograr</div></div>
+  <div class="c6card" style="border-color:#34d399;align-items:center;text-align:center;"><div class="c6ic">💬</div><div class="c6ct">Pregunta y platica</div><div class="c6cd">Escríbele, mándale fotos o capturas, y sigue preguntando</div></div>
+</div>
+<div class="c6rule grn rv" style="--d:.9s;"><span class="e">🔁</span><span>¿No entendiste la respuesta? Pídele: <b>“explícamelo más fácil”</b>, <b>“más corto”</b> o <b>“con un ejemplo”</b>.</span></div></div></div>
+      `}},
+
+      { type: "rawhtml", data: { html: `
+<div class="c6 ia" data-fx="gold" style="align-items:center;justify-content:center;text-align:center;gap:calc(var(--u)*1.8);">
+  <div class="iabigic rv">🤖</div>
+  <div class="c6k rv" style="--d:.2s;">Tu reto de hoy</div>
+  <h2 class="c6t rv" style="--d:.35s;font-size:calc(var(--u)*5.6);">Ya tienes un <em>experto para todo</em></h2>
+  <p class="c6s rv" style="--d:.5s;max-width:calc(var(--u)*78);">Abre ChatGPT o Claude y crea hoy mismo tus primeros 3 asistentes:</p>
+  <div class="c6g stg" style="--c:3;--d:.7s;width:100%;max-width:calc(var(--u)*100);flex:none;">
+    <div class="c6card" style="align-items:center;"><div class="c6ic">💰</div><div class="c6ct">Uno para tu contenido</div></div>
+    <div class="c6card" style="align-items:center;"><div class="c6ic">🏠</div><div class="c6ct">Uno para tu casa</div></div>
+    <div class="c6card" style="align-items:center;"><div class="c6ic">💪</div><div class="c6ct">Uno para tu salud</div></div>
+  </div>
+  <div class="iabig rv" style="--d:1.2s;"><img src="${C15L.chatgpt}" alt="ChatGPT" style="width:calc(var(--u)*5.6);height:calc(var(--u)*5.6);"><span class="plus" style="font-size:calc(var(--u)*2.6);">+</span><img src="${C15L.claude}" alt="Claude" style="width:calc(var(--u)*5.6);height:calc(var(--u)*5.6);"></div>
+</div>
+      `}}
+
+    ]
   }
 ]
 
@@ -1601,7 +1973,7 @@ const CLASS_CATS = {
   seg:  { name: 'Seguridad',        color: '#34d399' }
 };
 const CLASS_CAT_BY_ID = { 1:'fund', 2:'fund', 3:'edit', 4:'edit', 5:'ia', 6:'plat', 7:'ia', 8:'fund', 9:'ia',
-                          10:'edit', 11:'fund', 12:'edit', 13:'ia', 14:'plat', 15:'ia', 16:'seg' };
+                          10:'edit', 11:'fund', 12:'edit', 13:'ia', 14:'plat', 15:'ia', 16:'seg', 17:'ia' };
 const PORTAL = { q: '', cat: 'all', sort: 'asc' };
 
 function lsGet(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }
@@ -2193,6 +2565,7 @@ async function downloadPDF() {
     const W = wrap.offsetWidth, H = wrap.offsetHeight;
     const pdf = new jsPDF({ orientation: W >= H ? 'landscape' : 'portrait', unit: 'px', format: [W, H] });
     const saved = IDX, tot = CUR.slides.length;
+    wrap.classList.add('ia-pdf');
 
     for (let i = 0; i < tot; i++) {
       activateSlide(i, 1, true);
@@ -2208,12 +2581,13 @@ async function downloadPDF() {
     activateSlide(saved, 1, true);
     syncNav();
     const name = CUR.title.replace(/[^\w\sáéíóúñÁÉÍÓÚÑ]/g, '').trim();
-    pdf.save(`ChinoTeacher — ${name}.pdf`);
+    pdf.save(`Club de Monetización — ${name}.pdf`);
 
   } catch(e) {
     console.error('PDF error:', e);
     alert('Error al generar el PDF: ' + e.message);
   } finally {
+    document.getElementById('slideWrap').classList.remove('ia-pdf');
     overlay.classList.remove('on');
   }
 }
