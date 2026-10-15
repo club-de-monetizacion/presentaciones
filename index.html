@@ -131,6 +131,19 @@
       background: rgba(255,255,255,.05); border: 1px solid var(--border); transition: all .2s;
     }
     .p-continue button:hover { color: #fff; border-color: rgba(167,139,250,.6); background: rgba(124,58,237,.14); }
+    /* Herramientas para la clase (el timer de la pausa) */
+    .p-tools { max-width: 1380px; margin: 14px auto 0; padding: 0 44px; display: flex; flex-wrap: wrap; gap: 10px; }
+    .p-tool {
+      display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: #f4f6ff; font-size: .86rem;
+      padding: 8px 18px 8px 8px; border-radius: 100px; transition: all .2s;
+      background: linear-gradient(160deg, rgba(36,56,130,.45), rgba(10,18,48,.7)); border: 1px solid rgba(255,217,125,.35);
+    }
+    .p-tool i {
+      font-style: normal; width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; font-size: .95rem;
+      background: linear-gradient(145deg, #ffd97d, #c9a040); color: #1a1200;
+    }
+    .p-tool small { color: rgba(232,236,255,.6); font-size: .8rem; }
+    .p-tool:hover { border-color: #ffd97d; box-shadow: 0 8px 24px rgba(201,160,64,.25); transform: translateY(-1px); }
 
     /* Barra de búsqueda y filtros */
     #portal .p-toolbar {
@@ -932,6 +945,7 @@
       .pf-art::after { display: none; }
       .pf-txt { padding: 24px 22px 28px; }
       .p-continue { padding: 0 14px; }
+      .p-tools { padding: 0 14px; }
       #portal .p-toolbar { padding: 10px 12px; gap: 10px; margin-top: 22px; }
       .ph-eyebrow { letter-spacing: .16em; font-size: .62rem; }
       .p-search { width: 100%; }
@@ -1016,6 +1030,9 @@
   </header>
   <section class="p-featured" id="pFeatured"></section>
   <div class="p-continue" id="pContinue"></div>
+  <div class="p-tools">
+    <a class="p-tool" href="/timer/"><i>⏱</i><b>Timer de 5 minutos</b><small>Pausa entre partes de la clase</small></a>
+  </div>
   <div class="p-toolbar" id="pToolbar">
     <label class="p-search"><span>🔍</span><input id="pSearch" type="search" placeholder="Buscar una clase…" autocomplete="off" aria-label="Buscar clase"><kbd>/</kbd></label>
     <div class="p-chips" id="pChips"></div>
